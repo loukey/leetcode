@@ -510,6 +510,159 @@ class Solution:
     return ans
   ````
 
+ #### 18. 4Sum
+  - Q:
+  - A:
+  ````python
+  class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        length = len(nums)
+        if length < 4:
+            return []
+        nums.sort()
+        ans = []
+        for i in range(0, length - 3):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            if nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target:
+                return ans
+            tri_target = target - nums[i]
+            for j in range(i + 1, length - 2):
+                if j > i + 1 and nums[j] == nums[j - 1]:
+                    continue
+                begin = j + 1
+                end = length - 1
+                while begin < end:
+                    temp_sum = nums[j] + nums[begin] + nums[end]
+                    if temp_sum == tri_target:
+                        ans.append([nums[i], nums[j], nums[begin], nums[end]])
+                        begin += 1
+                        end -= 1
+                        while begin < end and nums[begin] == nums[begin - 1]:
+                            begin += 1
+                        while begin < end and nums[end] == nums[end + 1]:
+                            end -= 1
+                    elif temp_sum > tri_target:
+                        end -= 1
+                    else:
+                        begin += 1
+        return ans
+  ````
+
+ #### 19. Remove Nth Node From End of List
+  - Q: 删除链表中的一个节点
+  ````python
+  Given linked list: 1->2->3->4->5, and n = 2.
+  After removing the second node from the end, the linked list becomes 1->2->3->5.
+  ````
+  - A:
+  ````python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.next = None
+
+  class Solution:
+      def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+          temp_list = []
+          num = 0
+          l = ListNode(num)
+          l.next = head
+          while l.next:
+              num += 1
+              temp_list.append(l.next)
+              l = l.next
+          if num == n:
+              return head.next
+          temp_list[num - n - 1].next = temp_list[num - n].next
+          return head
+  ````
+
+ #### 20. Valid Parentheses
+  - Q: 判断`()[]{}`组合的有效性, 栈的应用
+  ````
+  Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+  An input string is valid if:
+  Open brackets must be closed by the same type of brackets.
+  Open brackets must be closed in the correct order.
+  Note that an empty string is also considered valid.
+  ````
+  - A:
+  ````python
+  class Solution:
+    def isValid(self, s: str) -> bool:
+        if s == "":
+            return True
+        stack = []
+        hash_map = {
+            "(": ")",
+            "[": "]",
+            "{": "}",
+        }
+        for i in range(len(s)):
+            if len(stack) > (len(s) - i):
+                return False
+            if s[i] in hash_map:
+                stack.append(hash_map[s[i]])
+            elif stack == [] or s[i] != stack.pop():
+                return False
+        if stack != []:
+            return False
+        return True
+  ````
+
+ #### 21. Merge Two Sorted Lists
+  - Q: 按序合并两个链表
+  ````python
+  Input: 1->2->4, 1->3->4
+  Output: 1->1->2->3->4->4
+  ````
+  - A:
+  ````python
+  class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        if l1.val > l2.val:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2
+        else:
+            l1.next = self.mergeTwoLists(l1.next, l2)
+            return l1
+  ````
+
+ #### 22. Generate Parentheses
+  - Q: 找出括号数为n的最大有效组合
+  ````python
+  [
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+  ]
+  ````
+  - A:
+  ````python
+  class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0:
+            return [""]
+        ans = []
+        def search(s, front, rear):
+            if rear == 0 and front == 0:
+                ans.append(s)
+            if rear > front:
+                search(s + ")", front, rear - 1)
+            if front > 0:
+                search(s + "(", front - 1, rear)
+        search("(", n - 1, n)
+        return ans
+  ````
+
  #### 169. Majority Element
   - Q: 求众数
   ````python
