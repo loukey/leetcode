@@ -663,6 +663,80 @@ class Solution:
         return ans
   ````
 
+ #### 23. Merge k Sorted Lists
+  - Q: 合并k个有序链表, 双链表分治合并
+  - A:
+  ````python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.next = None
+
+  class Solution:
+      def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+          ans = []
+          for i in range(len(lists)):
+              temp_list = lists[i]
+              while temp_list:
+                  ans.append(temp_list.val)
+                  temp_list = temp_list.next
+          if len(ans) == 0:
+              return []
+          ans.sort()
+          head = ListNode(1)
+          temp_list = ListNode(ans[0])
+          head.next = temp_list
+          for i in range(1, len(ans)):
+              temp_list.next = ListNode(ans[i])
+              temp_list = temp_list.next
+          return head.next
+  ````
+
+ #### 24. Swap Nodes in Pairs
+  - Q: 链表中数据相互交换
+  - A:
+  ````python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.next = None
+
+  class Solution:
+      def swapPairs(self, head: ListNode) -> ListNode:
+          """
+          :type head: ListNode
+          :rtype: ListNode
+          """
+          # Dummy node acts as the prevNode for the head node
+          # of the list and hence stores pointer to the head node.
+          dummy = ListNode(-1)
+          dummy.next = head
+
+          prev_node = dummy
+
+          while head and head.next:
+
+              # Nodes to be swapped
+              first_node = head;
+              second_node = head.next;
+
+              # Swapping
+              prev_node.next = second_node
+              first_node.next = second_node.next
+              second_node.next = first_node
+
+              # Reinitializing the head and prev_node for next swap
+              prev_node = first_node
+              head = first_node.next
+
+          # Return the new head node.
+          return dummy.next
+  ````
+
+ #### 25. 
+
  #### 169. Majority Element
   - Q: 求众数
   ````python
