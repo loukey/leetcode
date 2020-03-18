@@ -1,73 +1,75 @@
 ## Leetcode
+[1. Two Sum](#1)
+[1071. Greatest Common Divisor of Strings](#1071)
 
 #### 1. Two Sum
  - Q: 找两个相加的数
  ````python
-Given nums = [2, 7, 11, 15], target = 9,
-Because nums[0] + nums[1] = 2 + 7 = 9,
-return [0, 1].
- ````
+  Given nums = [2, 7, 11, 15], target = 9,
+  Because nums[0] + nums[1] = 2 + 7 = 9,
+  return [0, 1].
+   ````
  - A:
-````python
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        nums_cp = copy.deepcopy(nums)
-        nums.sort()
-        i = 0
-        j = len(nums) - 1
-        for k in range(len(nums)):
-            if nums[i] + nums[j] == target:
-                index_i = nums_cp.index(nums[i])
-                index_j = nums_cp.index(nums[j])
-                if index_i == index_j:
-                    index_j = len(nums_cp) - 1 - nums_cp[::-1].index(nums[j])
-                return [index_i, index_j]
-            elif nums[i] + nums[j] > target:
-                j -= 1
-            else:
-                i += 1
-````
+  ````python
+  class Solution:
+      def twoSum(self, nums: List[int], target: int) -> List[int]:
+          nums_cp = copy.deepcopy(nums)
+          nums.sort()
+          i = 0
+          j = len(nums) - 1
+          for k in range(len(nums)):
+              if nums[i] + nums[j] == target:
+                  index_i = nums_cp.index(nums[i])
+                  index_j = nums_cp.index(nums[j])
+                  if index_i == index_j:
+                      index_j = len(nums_cp) - 1 - nums_cp[::-1].index(nums[j])
+                  return [index_i, index_j]
+              elif nums[i] + nums[j] > target:
+                  j -= 1
+              else:
+                  i += 1
+ ````
 
 #### 2. Add Two Numbers
  - Q: 加两个链表数据
-````python
-Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
-Output: 7 -> 0 -> 8
-Explanation: 342 + 465 = 807.
+  ````python
+  Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+  Output: 7 -> 0 -> 8
+  Explanation: 342 + 465 = 807.
 
- ````
+   ````
  - A:
- ````python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        result = l1.val + l2.val
-        l1.val = result % 10
-        if not l1.next and not l2.next:
-            if result >= 10:
-                l1.next = ListNode(1)
-        elif not l1.next and l2.next:
-            if result >= 10:
-                l1.next = self.addTwoNumbers(ListNode(1), l2.next)
-            else:
-                l2.next.val += result // 10
-                l1.next = l2.next
-        elif l1.next and not l2.next:
-            if result >= 10:
-                l1.next = self.addTwoNumbers(l1.next, ListNode(1))
-            else:
-                l1.next.val += result // 10
-        else:
-            l1.next.val += result // 10
-            l1.next = self.addTwoNumbers(l1.next, l2.next)
-        return l1
- ````
+   ````python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.next = None
+  class Solution:
+      def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+          result = l1.val + l2.val
+          l1.val = result % 10
+          if not l1.next and not l2.next:
+              if result >= 10:
+                  l1.next = ListNode(1)
+          elif not l1.next and l2.next:
+              if result >= 10:
+                  l1.next = self.addTwoNumbers(ListNode(1), l2.next)
+              else:
+                  l2.next.val += result // 10
+                  l1.next = l2.next
+          elif l1.next and not l2.next:
+              if result >= 10:
+                  l1.next = self.addTwoNumbers(l1.next, ListNode(1))
+              else:
+                  l1.next.val += result // 10
+          else:
+              l1.next.val += result // 10
+              l1.next = self.addTwoNumbers(l1.next, l2.next)
+          return l1
+   ````
 
- #### 3. Longest Substring Without Repeating Characters
+#### 3. Longest Substring Without Repeating Characters
  - Q: 寻找最长不重复子串
   ````python
   Input: "abcabcbb"
@@ -109,7 +111,7 @@ class Solution:
         return result
    ````
 
-  #### 4. Median of Two Sorted Arrays
+#### 4. Median of Two Sorted Arrays
  - Q: 两个有序数组的中位数
  - A:
  ````python
@@ -144,7 +146,8 @@ class Solution:
                     k4 = nums1[i] if j == n else nums2[j]
                     return (max(k1, k2) + min(k3, k4)) / 2
  ````
- #### 5. Longest Palindromic Substring
+
+#### 5. Longest Palindromic Substring
   - Q: 回文串
   ````python
   Input: "babad"
@@ -168,7 +171,8 @@ class Solution:
                         return s[j: j+i]
         return s[0]
   ````
- #### 6. ZigZag Conversion
+
+#### 6. ZigZag Conversion
  - Q: Z字型字符串
  ````python
   Input: s = "PAYPALISHIRING", numRows = 4
@@ -204,7 +208,7 @@ class Solution:
           return ans
  ````
 
- #### 7. Reverse Integer
+#### 7. Reverse Integer
  - Q: 数字翻转
  - A:
  ````python
@@ -225,7 +229,7 @@ class Solution:
         return result
  ````
 
- #### 8. String to Integer (atoi)
+#### 8. String to Integer (atoi)
   - Q: `atoi function`
   - A:
   ````python
@@ -234,7 +238,7 @@ class Solution:
         return max(min(int(*re.findall('^[\+\-]?\d+', str.lstrip())), 2**31 - 1), -2**31)
   ````
 
- #### 9. Palindrome Number
+#### 9. Palindrome Number
   - Q: 判断是不是回文串
   - A:
   ````python
@@ -244,7 +248,7 @@ class Solution:
         return x == x[::-1]
   ````
 
- #### 10. Regular Expression Matching
+#### 10. Regular Expression Matching
   - Q: `.`和`*`的正则匹配
   ````python
   Input:
@@ -282,7 +286,7 @@ class Solution:
         return dp(0, 0)
   ````
 
- #### 11. Container With Most Water
+#### 11. Container With Most Water
   - Q: 求[A, B]之间的最大容量, 容量 = min(list[B], list[A]) * (B - A)
   ````python
   Input: [1,8,6,2,5,4,8,3,7]
@@ -306,7 +310,7 @@ class Solution:
         return ans[2]
   ````
 
- #### 12. Integer to Roman
+#### 12. Integer to Roman
   - Q: int转罗马数字
   - A:
      - 解法一:
@@ -358,7 +362,7 @@ class Solution:
           return ans
      ````
 
- #### 13. Roman to Integer
+#### 13. Roman to Integer
   - Q: 罗马数字转int
   - A:
   ````python
@@ -381,7 +385,8 @@ class Solution:
                 ans += hash_map[s[i]]
         return ans
   ````
- #### 14. Longest Common Prefix
+
+#### 14. Longest Common Prefix
   - Q:
   - A:
   ````python
@@ -400,7 +405,7 @@ class Solution:
         return ans
   ````
 
- #### 15. 3Sum
+#### 15. 3Sum
   - Q: 三数之和
   ````python
   Given array nums = [-1, 0, 1, 2, -1, -4],
@@ -444,7 +449,7 @@ class Solution:
         return ans
   ````
 
- #### 16. 3Sum Closest
+#### 16. 3Sum Closest
   - Q: 找和最接近target的三个数
   ````python
   Given array nums = [-1, 2, 1, -4], and target = 1.
@@ -480,7 +485,7 @@ class Solution:
         return ans
   ````
 
- #### 17. Letter Combinations of a Phone Number
+#### 17. Letter Combinations of a Phone Number
   - Q: 九宫格拼音输入法
   ````python
   Input: "23"
@@ -510,7 +515,7 @@ class Solution:
     return ans
   ````
 
- #### 18. 4Sum
+#### 18. 4Sum
   - Q:
   - A:
   ````python
@@ -549,7 +554,7 @@ class Solution:
         return ans
   ````
 
- #### 19. Remove Nth Node From End of List
+#### 19. Remove Nth Node From End of List
   - Q: 删除链表中的一个节点
   ````python
   Given linked list: 1->2->3->4->5, and n = 2.
@@ -579,7 +584,7 @@ class Solution:
           return head
   ````
 
- #### 20. Valid Parentheses
+#### 20. Valid Parentheses
   - Q: 判断`()[]{}`组合的有效性, 栈的应用
   ````
   Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
@@ -612,7 +617,7 @@ class Solution:
         return True
   ````
 
- #### 21. Merge Two Sorted Lists
+#### 21. Merge Two Sorted Lists
   - Q: 按序合并两个链表
   ````python
   Input: 1->2->4, 1->3->4
@@ -634,7 +639,7 @@ class Solution:
             return l1
   ````
 
- #### 22. Generate Parentheses
+#### 22. Generate Parentheses
   - Q: 找出括号数为n的最大有效组合
   ````python
   [
@@ -663,7 +668,7 @@ class Solution:
         return ans
   ````
 
- #### 23. Merge k Sorted Lists
+#### 23. Merge k Sorted Lists
   - Q: 合并k个有序链表, 双链表分治合并
   - A:
   ````python
@@ -693,7 +698,7 @@ class Solution:
           return head.next
   ````
 
- #### 24. Swap Nodes in Pairs
+#### 24. Swap Nodes in Pairs
   - Q: 链表中数据相互交换
   - A:
   ````python
@@ -735,9 +740,112 @@ class Solution:
           return dummy.next
   ````
 
- #### 25. 
+#### 25. Reverse Nodes in k-Group
+  - Q: 反转n个节点
+  ````python
+  Example:
 
- #### 169. Majority Element
+  Given this linked list: 1->2->3->4->5
+
+  For k = 2, you should return: 2->1->4->3->5
+
+  For k = 3, you should return: 3->2->1->4->5
+  ````
+  - A:
+  ````python
+  # Definition for singly-linked list.
+  # class ListNode:
+  #     def __init__(self, x):
+  #         self.val = x
+  #         self.next = None
+
+  class Solution:
+      def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+          if not head.next:
+              return head
+          def k_reverse(head: ListNode):
+              temp = ListNode(-1)
+              temp.next = head
+              for i in range(k):
+                  if head:
+                      head = head.next
+                  else:
+                      return temp.next
+              head = temp.next
+              end = head
+              for i in range(k - 1):
+                  temp = end.next
+                  end.next = temp.next
+                  temp.next = head
+                  head = temp
+              end.next = k_reverse(end.next)
+              return head
+          return k_reverse(head)
+  ````
+
+#### 26. Remove Duplicates from Sorted Array
+  - Q: 去重
+  - A:
+  ````python
+  class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        i = 1
+        length = len(nums)
+        if length < 2:
+            return length
+        while i < length:
+            if nums[i] == nums[i - 1]:
+                del nums[i]
+                length -= 1
+            else:
+                i += 1
+        return len(nums)
+  ````
+
+#### 27. Remove Element
+  - Q: 删除某个元素
+  - A:
+  ````python
+  class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        i, j = 0, 0
+        length = len(nums)
+        for i in range(length):
+            if nums[i] == val:
+                if j == 0:
+                    j = i
+                while j < length and nums[j] == val:
+                    j += 1
+                if j == length:
+                    return i
+                else:
+                    nums[i], nums[j] = nums[j], nums[i]
+        return length
+  ````
+
+#### 28. Implement strStr()
+  - Q: 查找第一个匹配的子串
+  ````python
+  Input: haystack = "hello", needle = "ll"
+  Output: 2
+  ````
+  - A:
+  ````python
+  class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        length = len(haystack)
+        length2 = len(needle)
+        if length2 == 0:
+            return 0
+        for i in range(length):
+            if i + length2 > length:
+                return -1
+            elif haystack[i] == needle[0] and haystack[i: i + length2] == needle:
+                return i
+        return -1
+  ````
+
+#### 169. Majority Element
   - Q: 求众数
   ````python
   Input: [3,2,3]
@@ -770,7 +878,7 @@ class Solution:
            return ans
      ````
 
- #### 300. Longest Increasing Subsequence
+#### 300. Longest Increasing Subsequence
   - Q:
   - A:
      - 解法一:DP
@@ -814,7 +922,8 @@ class Solution:
                     ans[mid] = nums[i]
         return len(ans)
      ````
- #### 695. Max Area of Island
+
+#### 695. Max Area of Island
   - Q: 寻找最大连接的岛屿数量
   ````
  [[0,0,1,0,0,0,0,1,0,0,0,0,0],
@@ -850,8 +959,8 @@ class Solution:
             return 0
         return max(ans)
   ````
-
- #### 1071. Greatest Common Divisor of Strings
+<a id="1071"></a>
+#### 1071. Greatest Common Divisor of Strings
   - Q: 求最大公因子
   ````python
   Input: str1 = "ABCABC", str2 = "ABC"
