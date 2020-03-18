@@ -73,7 +73,7 @@
 
    ````
  - A:
-   ````python
+  ````python
   # Definition for singly-linked list.
   # class ListNode:
   #     def __init__(self, x):
@@ -101,7 +101,7 @@
               l1.next.val += result // 10
               l1.next = self.addTwoNumbers(l1.next, l2.next)
           return l1
-   ````
+  ````
 <a id="3"></a>
 #### 3. Longest Substring Without Repeating Characters
  - Q: 寻找最长不重复子串
