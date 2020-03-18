@@ -1,7 +1,41 @@
 ## Leetcode
-[1. Two Sum](#1)
-[1071. Greatest Common Divisor of Strings](#1071)
+* 1-100:
+  * [1. Two Sum](#1)
+  * [2. Add Two Numbers](#2)
+  * [3. Longest Substring Without Repeating Characters](#3)
+  * [4. Median of Two Sorted Arrays](#4)
+  * [5. Longest Palindromic Substring](#5)
+  * [6. ZigZag Conversion](#6)
+  * [7. Reverse Integer](#7)
+  * [8. String to Integer (atoi)](#8)
+  * [9. Palindrome Number](#9)
+  * [10. Regular Expression Matching](#10)
+  * [11. Container With Most Water](#11)
+  * [12. Integer to Roman](#12)
+  * [13. Roman to Integer](#13)
+  * [14. Longest Common Prefix](#14)
+  * [15. 3Sum](#15)
+  * [16. 3Sum Closest](#16)
+  * [17. Letter Combinations of a Phone Number](#17)
+  * [18. 4Sum](#18)
+  * [19. Remove Nth Node From End of List](#19)
+  * [20. Valid Parentheses](#20)
+  * [21. Merge Two Sorted Lists](#21)
+  * [22. Generate Parentheses](#22)
+  * [23. Merge k Sorted Lists](#23)
+  * [24. Swap Nodes in Pairs](#24)
+  * [25. Reverse Nodes in k-Group](#25)
+  * [26. Remove Duplicates from Sorted Array](#26)
+  * [27. Remove Element](#27)
+  * [28. Implement strStr()](#28)
+* 100+:
+  * [169. Majority Element](#169)
+  * [300. Longest Increasing Subsequence](#300)
+  * [695. Max Area of Island](#695)
+  * [1071. Greatest Common Divisor of Strings](#1071)
+* others
 
+<a id="1"></a>
 #### 1. Two Sum
  - Q: 找两个相加的数
  ````python
@@ -29,7 +63,7 @@
               else:
                   i += 1
  ````
-
+<a id="2"></a>
 #### 2. Add Two Numbers
  - Q: 加两个链表数据
   ````python
@@ -68,7 +102,7 @@
               l1.next = self.addTwoNumbers(l1.next, l2.next)
           return l1
    ````
-
+<a id="3"></a>
 #### 3. Longest Substring Without Repeating Characters
  - Q: 寻找最长不重复子串
   ````python
@@ -110,7 +144,7 @@
             hash_map[s[j]] = j + 1
         return result
    ````
-
+<a id="4"></a>
 #### 4. Median of Two Sorted Arrays
  - Q: 两个有序数组的中位数
  - A:
@@ -146,7 +180,7 @@
                     k4 = nums1[i] if j == n else nums2[j]
                     return (max(k1, k2) + min(k3, k4)) / 2
  ````
-
+<a id="5"></a>
 #### 5. Longest Palindromic Substring
   - Q: 回文串
   ````python
@@ -171,7 +205,7 @@
                         return s[j: j+i]
         return s[0]
   ````
-
+<a id="6"></a>
 #### 6. ZigZag Conversion
  - Q: Z字型字符串
  ````python
@@ -207,7 +241,7 @@
               ans += "".join(hash_map[i])
           return ans
  ````
-
+<a id="7"></a>
 #### 7. Reverse Integer
  - Q: 数字翻转
  - A:
@@ -228,7 +262,7 @@
                 return 0
         return result
  ````
-
+<a id="8"></a>
 #### 8. String to Integer (atoi)
   - Q: `atoi function`
   - A:
@@ -237,7 +271,7 @@
     def myAtoi(self, str: str) -> int:
         return max(min(int(*re.findall('^[\+\-]?\d+', str.lstrip())), 2**31 - 1), -2**31)
   ````
-
+<a id="9"></a>
 #### 9. Palindrome Number
   - Q: 判断是不是回文串
   - A:
@@ -247,7 +281,7 @@
         x = list(str(x))
         return x == x[::-1]
   ````
-
+<a id="10"></a>
 #### 10. Regular Expression Matching
   - Q: `.`和`*`的正则匹配
   ````python
@@ -285,7 +319,7 @@
             return hash_map[i, j]
         return dp(0, 0)
   ````
-
+<a id="11"></a>
 #### 11. Container With Most Water
   - Q: 求[A, B]之间的最大容量, 容量 = min(list[B], list[A]) * (B - A)
   ````python
@@ -309,7 +343,7 @@
                 front += 1
         return ans[2]
   ````
-
+<a id="12"></a>
 #### 12. Integer to Roman
   - Q: int转罗马数字
   - A:
@@ -361,7 +395,7 @@
               index += 1
           return ans
      ````
-
+<a id="13"></a>
 #### 13. Roman to Integer
   - Q: 罗马数字转int
   - A:
@@ -385,7 +419,7 @@
                 ans += hash_map[s[i]]
         return ans
   ````
-
+<a id="14"></a>
 #### 14. Longest Common Prefix
   - Q:
   - A:
@@ -404,7 +438,7 @@
             ans += s
         return ans
   ````
-
+<a id="15"></a>
 #### 15. 3Sum
   - Q: 三数之和
   ````python
@@ -448,7 +482,7 @@
                     begin += 1
         return ans
   ````
-
+<a id="16"></a>
 #### 16. 3Sum Closest
   - Q: 找和最接近target的三个数
   ````python
@@ -484,7 +518,7 @@
                     begin += 1
         return ans
   ````
-
+<a id="17"></a>
 #### 17. Letter Combinations of a Phone Number
   - Q: 九宫格拼音输入法
   ````python
@@ -514,7 +548,7 @@
         ans = [ans[j] + letters[j // (len(ans) // num)] for j in range(len(ans))]
     return ans
   ````
-
+<a id="18"></a>
 #### 18. 4Sum
   - Q:
   - A:
@@ -553,7 +587,7 @@
                         begin += 1
         return ans
   ````
-
+<a id="19"></a>
 #### 19. Remove Nth Node From End of List
   - Q: 删除链表中的一个节点
   ````python
@@ -583,7 +617,7 @@
           temp_list[num - n - 1].next = temp_list[num - n].next
           return head
   ````
-
+<a id="20"></a>
 #### 20. Valid Parentheses
   - Q: 判断`()[]{}`组合的有效性, 栈的应用
   ````
@@ -616,7 +650,7 @@
             return False
         return True
   ````
-
+<a id="21"></a>
 #### 21. Merge Two Sorted Lists
   - Q: 按序合并两个链表
   ````python
@@ -638,7 +672,7 @@
             l1.next = self.mergeTwoLists(l1.next, l2)
             return l1
   ````
-
+<a id="22"></a>
 #### 22. Generate Parentheses
   - Q: 找出括号数为n的最大有效组合
   ````python
@@ -667,7 +701,7 @@
         search("(", n - 1, n)
         return ans
   ````
-
+<a id="23"></a>
 #### 23. Merge k Sorted Lists
   - Q: 合并k个有序链表, 双链表分治合并
   - A:
@@ -697,7 +731,7 @@
               temp_list = temp_list.next
           return head.next
   ````
-
+<a id="24"></a>
 #### 24. Swap Nodes in Pairs
   - Q: 链表中数据相互交换
   - A:
@@ -739,7 +773,7 @@
           # Return the new head node.
           return dummy.next
   ````
-
+<a id="25"></a>
 #### 25. Reverse Nodes in k-Group
   - Q: 反转n个节点
   ````python
@@ -782,7 +816,7 @@
               return head
           return k_reverse(head)
   ````
-
+<a id="26"></a>
 #### 26. Remove Duplicates from Sorted Array
   - Q: 去重
   - A:
@@ -801,7 +835,7 @@
                 i += 1
         return len(nums)
   ````
-
+<a id="27"></a>
 #### 27. Remove Element
   - Q: 删除某个元素
   - A:
@@ -822,7 +856,7 @@
                     nums[i], nums[j] = nums[j], nums[i]
         return length
   ````
-
+<a id="28"></a>
 #### 28. Implement strStr()
   - Q: 查找第一个匹配的子串
   ````python
@@ -844,7 +878,7 @@
                 return i
         return -1
   ````
-
+<a id="169"></a>
 #### 169. Majority Element
   - Q: 求众数
   ````python
@@ -877,7 +911,7 @@
                    num += 1 if ans == i else -1
            return ans
      ````
-
+<a id="300"></a>
 #### 300. Longest Increasing Subsequence
   - Q:
   - A:
@@ -922,7 +956,7 @@
                     ans[mid] = nums[i]
         return len(ans)
      ````
-
+<a id="695"></a>
 #### 695. Max Area of Island
   - Q: 寻找最大连接的岛屿数量
   ````
