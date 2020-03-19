@@ -29,6 +29,7 @@
   * [27. Remove Element](#27)
   * [28. Implement strStr()](#28)
 * 100+:
+  * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
   * [300. Longest Increasing Subsequence](#300)
   * [695. Max Area of Island](#695)
@@ -711,7 +712,6 @@
   #     def __init__(self, x):
   #         self.val = x
   #         self.next = None
-
   class Solution:
       def mergeKLists(self, lists: List[ListNode]) -> ListNode:
           ans = []
@@ -741,7 +741,6 @@
   #     def __init__(self, x):
   #         self.val = x
   #         self.next = None
-
   class Solution:
       def swapPairs(self, head: ListNode) -> ListNode:
           """
@@ -773,16 +772,13 @@
           # Return the new head node.
           return dummy.next
   ````
-<a id="25"></a>
+<a id="25"></a>ß
 #### 25. Reverse Nodes in k-Group
   - Q: 反转n个节点
   ````python
   Example:
-
   Given this linked list: 1->2->3->4->5
-
   For k = 2, you should return: 2->1->4->3->5
-
   For k = 3, you should return: 3->2->1->4->5
   ````
   - A:
@@ -792,7 +788,6 @@
   #     def __init__(self, x):
   #         self.val = x
   #         self.next = None
-
   class Solution:
       def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
           if not head.next:
@@ -878,6 +873,64 @@
                 return i
         return -1
   ````
+<a id="133"></a>
+#### 133. Clone Graph
+   - Q: 邻接表遍历图
+   - A:
+     - 解法一: DFS
+     ````python
+      """
+      # Definition for a Node.
+      class Node:
+          def __init__(self, val = 0, neighbors = []):
+              self.val = val
+              self.neighbors = neighbors
+      """
+      class Solution:
+          def cloneGraph(self, node: 'Node') -> 'Node':
+              if not node:
+                  return None
+              gragh_map = {}
+              def search_node(node):
+                  if node.val not in gragh_map:
+                      gragh_map[node.val] = [nei_node.val for nei_node in node.neighbors]
+                      for i in node.neighbors:
+                          search_node(i)
+              search_node(node)
+              nodes = [0]
+              for i in range(1, len(gragh_map) + 1):
+                  nodes.append(Node(i))
+              for i in range(1, len(gragh_map) + 1):
+                  nodes[i].neighbors = [nodes[j] for j in gragh_map[i]]
+              return nodes[1]
+     ````
+     - 解法二: BFS
+     ````python
+      """
+      # Definition for a Node.
+      class Node:
+          def __init__(self, val = 0, neighbors = []):
+              self.val = val
+              self.neighbors = neighbors
+      """
+      from collections import deque
+      class Solution:
+          def cloneGraph(self, node: 'Node') -> 'Node':
+              if not node:
+                  return None
+              queue = deque([node])
+              hash_map = {}
+              hash_map[node] = Node(node.val)
+              while queue:
+                  temp_node = queue.popleft()
+                  if temp_node.neighbors:
+                      for neighbor in temp_node.neighbors:
+                          if neighbor not in hash_map:
+                              hash_map[neighbor] = Node(neighbor.val)
+                              queue.append(neighbor)
+                          hash_map[temp_node].neighbors.append(hash_map[neighbor])
+              return hash_map[node]
+     ````
 <a id="169"></a>
 #### 169. Majority Element
   - Q: 求众数
