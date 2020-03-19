@@ -31,6 +31,7 @@
 * 100+:
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
+  * [207. Course Schedule](#207)
   * [300. Longest Increasing Subsequence](#300)
   * [695. Max Area of Island](#695)
   * [1071. Greatest Common Divisor of Strings](#1071)
@@ -64,6 +65,7 @@
               else:
                   i += 1
  ````
+
 <a id="2"></a>
 #### 2. Add Two Numbers
  - Q: 加两个链表数据
@@ -103,6 +105,7 @@
               l1.next = self.addTwoNumbers(l1.next, l2.next)
           return l1
   ````
+
 <a id="3"></a>
 #### 3. Longest Substring Without Repeating Characters
  - Q: 寻找最长不重复子串
@@ -145,6 +148,7 @@
             hash_map[s[j]] = j + 1
         return result
    ````
+
 <a id="4"></a>
 #### 4. Median of Two Sorted Arrays
  - Q: 两个有序数组的中位数
@@ -181,6 +185,7 @@
                     k4 = nums1[i] if j == n else nums2[j]
                     return (max(k1, k2) + min(k3, k4)) / 2
  ````
+
 <a id="5"></a>
 #### 5. Longest Palindromic Substring
   - Q: 回文串
@@ -206,6 +211,7 @@
                         return s[j: j+i]
         return s[0]
   ````
+
 <a id="6"></a>
 #### 6. ZigZag Conversion
  - Q: Z字型字符串
@@ -242,6 +248,7 @@
               ans += "".join(hash_map[i])
           return ans
  ````
+
 <a id="7"></a>
 #### 7. Reverse Integer
  - Q: 数字翻转
@@ -263,6 +270,7 @@
                 return 0
         return result
  ````
+
 <a id="8"></a>
 #### 8. String to Integer (atoi)
   - Q: `atoi function`
@@ -272,6 +280,7 @@
     def myAtoi(self, str: str) -> int:
         return max(min(int(*re.findall('^[\+\-]?\d+', str.lstrip())), 2**31 - 1), -2**31)
   ````
+
 <a id="9"></a>
 #### 9. Palindrome Number
   - Q: 判断是不是回文串
@@ -282,6 +291,7 @@
         x = list(str(x))
         return x == x[::-1]
   ````
+
 <a id="10"></a>
 #### 10. Regular Expression Matching
   - Q: `.`和`*`的正则匹配
@@ -320,6 +330,7 @@
             return hash_map[i, j]
         return dp(0, 0)
   ````
+
 <a id="11"></a>
 #### 11. Container With Most Water
   - Q: 求[A, B]之间的最大容量, 容量 = min(list[B], list[A]) * (B - A)
@@ -344,6 +355,7 @@
                 front += 1
         return ans[2]
   ````
+
 <a id="12"></a>
 #### 12. Integer to Roman
   - Q: int转罗马数字
@@ -396,6 +408,7 @@
               index += 1
           return ans
      ````
+
 <a id="13"></a>
 #### 13. Roman to Integer
   - Q: 罗马数字转int
@@ -420,6 +433,7 @@
                 ans += hash_map[s[i]]
         return ans
   ````
+
 <a id="14"></a>
 #### 14. Longest Common Prefix
   - Q:
@@ -439,6 +453,7 @@
             ans += s
         return ans
   ````
+
 <a id="15"></a>
 #### 15. 3Sum
   - Q: 三数之和
@@ -483,6 +498,7 @@
                     begin += 1
         return ans
   ````
+
 <a id="16"></a>
 #### 16. 3Sum Closest
   - Q: 找和最接近target的三个数
@@ -519,6 +535,7 @@
                     begin += 1
         return ans
   ````
+
 <a id="17"></a>
 #### 17. Letter Combinations of a Phone Number
   - Q: 九宫格拼音输入法
@@ -549,6 +566,7 @@
         ans = [ans[j] + letters[j // (len(ans) // num)] for j in range(len(ans))]
     return ans
   ````
+
 <a id="18"></a>
 #### 18. 4Sum
   - Q:
@@ -588,6 +606,7 @@
                         begin += 1
         return ans
   ````
+
 <a id="19"></a>
 #### 19. Remove Nth Node From End of List
   - Q: 删除链表中的一个节点
@@ -618,6 +637,7 @@
           temp_list[num - n - 1].next = temp_list[num - n].next
           return head
   ````
+
 <a id="20"></a>
 #### 20. Valid Parentheses
   - Q: 判断`()[]{}`组合的有效性, 栈的应用
@@ -651,6 +671,7 @@
             return False
         return True
   ````
+
 <a id="21"></a>
 #### 21. Merge Two Sorted Lists
   - Q: 按序合并两个链表
@@ -673,6 +694,7 @@
             l1.next = self.mergeTwoLists(l1.next, l2)
             return l1
   ````
+
 <a id="22"></a>
 #### 22. Generate Parentheses
   - Q: 找出括号数为n的最大有效组合
@@ -702,6 +724,7 @@
         search("(", n - 1, n)
         return ans
   ````
+
 <a id="23"></a>
 #### 23. Merge k Sorted Lists
   - Q: 合并k个有序链表, 双链表分治合并
@@ -731,6 +754,7 @@
               temp_list = temp_list.next
           return head.next
   ````
+
 <a id="24"></a>
 #### 24. Swap Nodes in Pairs
   - Q: 链表中数据相互交换
@@ -772,7 +796,8 @@
           # Return the new head node.
           return dummy.next
   ````
-<a id="25"></a>ß
+
+<a id="25"></a>
 #### 25. Reverse Nodes in k-Group
   - Q: 反转n个节点
   ````python
@@ -811,6 +836,7 @@
               return head
           return k_reverse(head)
   ````
+
 <a id="26"></a>
 #### 26. Remove Duplicates from Sorted Array
   - Q: 去重
@@ -830,6 +856,7 @@
                 i += 1
         return len(nums)
   ````
+
 <a id="27"></a>
 #### 27. Remove Element
   - Q: 删除某个元素
@@ -851,6 +878,7 @@
                     nums[i], nums[j] = nums[j], nums[i]
         return length
   ````
+
 <a id="28"></a>
 #### 28. Implement strStr()
   - Q: 查找第一个匹配的子串
@@ -873,6 +901,7 @@
                 return i
         return -1
   ````
+
 <a id="133"></a>
 #### 133. Clone Graph
    - Q: 邻接表遍历图
@@ -931,6 +960,7 @@
                           hash_map[temp_node].neighbors.append(hash_map[neighbor])
               return hash_map[node]
      ````
+
 <a id="169"></a>
 #### 169. Majority Element
   - Q: 求众数
@@ -939,10 +969,9 @@
   Output: 3
   ````
   - A:
-     - 解法一
+     - 解法一:
     ````python
     from collections import Counter
-
     class Solution:
       def majorityElement(self, nums: List[int]) -> int:
           c = Counter(nums)
@@ -951,7 +980,6 @@
      - Boyer-Moore 投票
      ````python
      from collections import Counter
-
      class Solution:
         def majorityElement(self, nums: List[int]) -> int:
            ans = nums[0]
@@ -964,6 +992,69 @@
                    num += 1 if ans == i else -1
            return ans
      ````
+
+<a id="207"></a>
+#### 207. Course Schedule
+   - Q:
+   - A:
+     - 解法一: DFS
+     ````python
+     class Solution:
+      def __init__(self):
+          self.temp_arr = []
+      def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+          if not prerequisites:
+              return True
+          # 建立邻接表
+          # 遍历所有节点, DFS, 记录每一个可行的节点
+          # 记录path, 当形成回环时返回false
+          adjacency_matrices = [[] for i in range(numCourses)]
+          for i, j in prerequisites:
+              adjacency_matrices[i].append(j)
+          ans = []
+          def search_end(node, path):
+              if node not in ans and adjacency_matrices[node]:
+                  if node in path:
+                      return False
+                  path.append(node)
+                  for i in adjacency_matrices[node]:
+                      if not search_end(i, path):
+                          return False
+              ans.append(node)
+              return True
+          for i in range(numCourses):
+              if i not in ans and not search_end(i, []):
+                  return False
+          return True
+     ````
+     - 解法二: 拓扑排序
+     ````python
+     from collections import deque
+        class Solution:
+            def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+                if not prerequisites:
+                    return True
+                # 拓扑排序, 建立一个队列, 不断的删除入度为0的节点
+                adajence_matrix = [[] for i in range(numCourses)]
+                queue = deque()
+                ans = [0] * numCourses
+                for i, j in prerequisites:
+                    adajence_matrix[j].append(i)
+                    ans[i] += 1
+                for i in range(numCourses):
+                    if ans[i] == 0:
+                        queue.append(i)
+                while queue:
+                    for node_number in adajence_matrix[queue.popleft()]:
+                        ans[node_number] -= 1
+                        if ans[node_number] == 0:
+                            queue.append(node_number)
+                if sum(ans) == 0:
+                    return True
+                else:
+                    return False
+     ````
+
 <a id="300"></a>
 #### 300. Longest Increasing Subsequence
   - Q:
@@ -1009,6 +1100,7 @@
                     ans[mid] = nums[i]
         return len(ans)
      ````
+
 <a id="695"></a>
 #### 695. Max Area of Island
   - Q: 寻找最大连接的岛屿数量
@@ -1046,6 +1138,7 @@
             return 0
         return max(ans)
   ````
+
 <a id="1071"></a>
 #### 1071. Greatest Common Divisor of Strings
   - Q: 求最大公因子
