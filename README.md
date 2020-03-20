@@ -32,6 +32,7 @@
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
   * [207. Course Schedule](#207)
+  * [210. Course Schedule II](#210)
   * [300. Longest Increasing Subsequence](#300)
   * [695. Max Area of Island](#695)
   * [1071. Greatest Common Divisor of Strings](#1071)
@@ -1054,6 +1055,39 @@
                 else:
                     return False
      ````
+
+<a id="210"></a>
+#### 210. Course Schedule II
+   - Q: 排课拓扑排序
+   - A:
+   ````python
+    from collections import deque
+    class Solution:
+        def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+            if numCourses == 0:
+                return []
+            adjacency_matrix = [[] for i in range(numCourses)]
+            ans = [0] * numCourses
+            queue = deque()
+            for i, j in prerequisites:
+                adjacency_matrix[j].append(i)
+                ans[i] += 1
+            for i in range(numCourses):
+                if ans[i] == 0:
+                    queue.append(i)
+            result = []
+            while queue:
+                pop_number = queue.popleft()
+                result.append(pop_number)
+                for node_number in adjacency_matrix[pop_number]:
+                    ans[node_number] -= 1
+                    if ans[node_number] == 0:
+                        queue.append(node_number)
+            if sum(ans) != 0:
+                return []
+            else:
+                return result
+   ````
 
 <a id="300"></a>
 #### 300. Longest Increasing Subsequence
