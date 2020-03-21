@@ -34,9 +34,13 @@
   * [207. Course Schedule](#207)
   * [210. Course Schedule II](#210)
   * [300. Longest Increasing Subsequence](#300)
+  * [409. Longest Palindrome](#409)
   * [695. Max Area of Island](#695)
+  * [794. Valid Tic-Tac-Toe State](#794)
   * [1071. Greatest Common Divisor of Strings](#1071)
+  * [1160. Find Words That Can Be Formed by Characters](#1160)
 * others
+  * [interview1. The Minimum Number](#I1)
 
 <a id="1"></a>
 #### 1. Two Sum
@@ -1135,6 +1139,25 @@
         return len(ans)
      ````
 
+<a id="409"></a>
+#### 409. Longest Palindrome
+   - Q: 最长回文串
+   - A:
+   ````python
+    from collections import Counter
+    class Solution:
+        def longestPalindrome(self, s: str) -> int:
+            if s == "":
+                return 0
+            hash_map = Counter(s)
+            ans = 0
+            for key, value in hash_map.items():
+                ans += hash_map[key] // 2
+            if (ans := ans * 2) < len(s):
+                ans += 1
+            return ans
+   ````
+
 <a id="695"></a>
 #### 695. Max Area of Island
   - Q: 寻找最大连接的岛屿数量
@@ -1173,6 +1196,62 @@
         return max(ans)
   ````
 
+<a id="794"></a>
+#### 794. Valid Tic-Tac-Toe State
+   - Q: 三子棋
+   - A:
+   ````python
+   class Solution:
+    def validTicTacToe(self, board: List[str]) -> bool:
+        len_x = 0
+        len_o = 0
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == 'X':
+                    len_x += 1
+                elif board[i][j] == 'O':
+                    len_o += 1
+        if len_x < len_o or len_x > len_o + 1:
+            return False
+        if len_x + len_o > 9:
+            return False
+        flag_x = 0
+        flag_y = 0
+        mode = ["XXX"]
+        for i in range(3):
+            if board[i] in mode:
+                flag_x += 1
+        for j in range(3):
+            if board[0][j] + board[1][j] + board[2][j] in mode:
+                flag_x +=1
+        if board[0][0] + board[1][1] + board[2][2] in mode:
+            flag_x += 1
+        if board[0][2] + board[1][1] + board[2][0] in mode:
+            flag_x += 1
+
+        mode = ["OOO"]
+        for i in range(3):
+            if board[i] in mode:
+                flag_y += 1
+        for j in range(3):
+            if board[0][j] + board[1][j] + board[2][j] in mode:
+                flag_y += 1
+        if board[0][0] + board[1][1] + board[2][2] in mode:
+            flag_y += 1
+        if board[0][2] + board[1][1] + board[2][0] in mode:
+            flag_y += 1
+
+        if flag_x == 1 and flag_y == 1:
+            return False
+        elif flag_x == 1 and flag_y == 0:
+            if len_x == len_o:
+                return False
+        elif flag_x == 0 and flag_y == 1:
+            if len_x > len_o:
+                return False
+        return True
+   ````
+
 <a id="1071"></a>
 #### 1071. Greatest Common Divisor of Strings
   - Q: 求最大公因子
@@ -1197,3 +1276,63 @@
             k += 1
         return ""
   ````
+
+<a id="1160"></a>
+#### 1160. Find Words That Can Be Formed by Characters
+   - Q: 查询`words`中`["cat","bt","hat","tree"]`那些可以被`chars`:`"atach"`组合
+   - A:
+   ````python
+   class Solution:
+    def countCharacters(self, words: List[str], chars: str) -> int:
+        chars_cnt = collections.Counter(chars)
+        ans = 0
+        for word in words:
+            word_cnt = collections.Counter(word)
+            for c in word_cnt:
+                if chars_cnt[c] < word_cnt[c]:
+                    break
+            else:
+                ans += len(word)
+        return ans
+   ````
+
+<a id="I1"></a>
+#### interview1. The Minimum Number
+   - Q:
+   ````python
+   含有重复数的数组，求这个数组的子集合的和中，最小不能得到的数,
+   比如[1,2,5]. 最小不能得到的是4
+   ````
+   - A:
+   ````python
+    arr = [1, 2, 3, 4, 5]
+    max_number = sum(arr)
+    result = [0] * (max_number + 1)
+    result[0] = max_number + 1
+    for i in arr:
+        result[i] += 1
+
+    def min_number(arr, count):
+        if sum(result) == 2 * max_number + 1:
+            return max_number + 1
+        if not arr:
+            return result.index(0)
+        front_num = result.index(0)
+        if min(arr) > front_num:
+            return front_num
+        result[arr[0] + count] = 1
+        if len(arr) == 1:
+            return min_number([], arr[0] + count)
+        else:
+            ans = [min_number(arr[1:], arr[0] + count)]
+            for i in range(1, len(arr)):
+                if arr[i] != arr[i - 1]:
+                    if i == len(arr) - 1:
+                        result[arr[-1] + count] = 1
+                        ans.append(min_number(arr[:-1], arr[-1] + count))
+                    else:
+                        result[arr[i] + count]
+                        ans.append(min_number(arr[:i] + arr[i + 1:], arr[i] + count))
+        return max(ans)
+    print(min_number(arr, 0))
+   ````
