@@ -29,6 +29,7 @@
   * [27. Remove Element](#27)
   * [28. Implement strStr()](#28)
   * [30. Substring with Concatenation of All Words](#30)
+  * [31. Next Permutation](#31)
 * 100+:
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
@@ -956,6 +957,47 @@
                       res.append(left)
                       left += word_len
               return res
+   ````
+
+<a id="31"></a>
+#### 31. Next Permutation
+   - Q:
+   ````
+    实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+    如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+    必须原地修改，只允许使用额外常数空间。
+    以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+    1,2,3 → 1,3,2
+    3,2,1 → 1,2,3
+    1,1,5 → 1,5,1
+   ````
+   - A:
+   ````python
+   设置两个标记位i, j, 从后向前遍历, 找到比i大且最接近i的数, 交换之后对i后面的进行升序排序
+   class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        temp_nums = copy.deepcopy(nums)
+        temp_nums.sort(reverse=True)
+        if nums == temp_nums:
+            nums.sort()
+        else:
+            flag = False
+            for i in range(len(nums) - 2, -1, -1):
+                ans = 10000
+                index = len(nums)
+                for j in range(len(nums) - 1, i, -1):
+                    if nums[i] < nums[j] and nums[j] - nums[i] < ans:
+                        ans = nums[i] - nums[j]
+                        index = j
+                if index != len(nums):
+                    nums[index], nums[i] = nums[i], nums[index]
+                    temp_nums = nums[i + 1:]
+                    temp_nums.sort()
+                    nums[i + 1:] = temp_nums
+                    break
    ````
 
 <a id="133"></a>
