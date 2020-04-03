@@ -28,6 +28,7 @@
   * [26. Remove Duplicates from Sorted Array](#26)
   * [27. Remove Element](#27)
   * [28. Implement strStr()](#28)
+  * [30. Substring with Concatenation of All Words](#30)
 * 100+:
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
@@ -41,6 +42,10 @@
   * [1160. Find Words That Can Be Formed by Characters](#1160)
 * others
   * [interview1. The Minimum Number](#I1)
+  * [interview2. 快手2020实习生招聘及补录-工程类笔试A卷-4](#I2)
+  * [interview3. 阿里2020实习生招聘-1](#I3)
+  * [interview4. 百度2020实习生招聘-1](#I4)
+  * [interview5. 百度2020实习生招聘-2](#I5)
 
 <a id="1"></a>
 #### 1. Two Sum
@@ -907,6 +912,52 @@
         return -1
   ````
 
+<a id="30"></a>
+#### 30. Substring with Concatenation of All Words
+   - Q:
+   ````
+   给定一个字符串 s 和一些长度相同的单词 words。找出 s 中恰好可以由 words 中所有单词串联形成的子串的起始位置。
+   注意子串要与 words 中的单词完全匹配，中间不能有其他字符，但不需要考虑 words 中单词串联的顺序。
+   输入：
+    s = "barfoothefoobarman",
+    words = ["foo","bar"]
+    输出：[0,9]
+    解释：
+    从索引 0 和 9 开始的子串分别是 "barfoo" 和 "foobar" 。
+    输出的顺序不重要, [9,0] 也是有效答案。
+   ````
+   - A:
+   ````python
+   一个数组匹配的hash, 遍历就行
+   import collections
+      class Solution:
+          def findSubstring(self, s: str, words: List[str]) -> List[int]:
+              res = []
+              if not words:
+                  return res
+              word_len = len(words[0])
+              win_len = word_len * len(words)
+              word_cnt = collections.Counter(words)
+              for left in range(word_len):
+                  while left + win_len <= len(s):
+                      temp = dict(word_cnt)
+                      right = left + win_len
+                      flag = True
+                      while right > left:
+                          cur_word = s[right - word_len: right]
+                          if cur_word not in words or temp[cur_word] == 0:
+                              flag = False
+                              break
+                          temp[cur_word] -= 1
+                          right -= word_len
+                      if not flag:
+                          left = right
+                          continue
+                      res.append(left)
+                      left += word_len
+              return res
+   ````
+
 <a id="133"></a>
 #### 133. Clone Graph
    - Q: 邻接表遍历图
@@ -1335,4 +1386,245 @@
                         ans.append(min_number(arr[:i] + arr[i + 1:], arr[i] + count))
         return max(ans)
     print(min_number(arr, 0))
+   ````
+
+<a id="I2"></a>
+#### interview2. 快手2020实习生招聘及补录-工程类笔试A卷-4
+   - Q:
+   ````
+   保护伞芯片公司现在拥有一块特殊的芯片材料板,这块材料板可以看做一个
+   n*m大小的矩阵,矩阵中的每一个单元蕴含着不的能量。现在公司需要放置
+   若干块ab大小的芯片在这块材料板上,但是放芯片的前提是材料板有a*b大
+   小的空位置,并且这些位置的能量是一样的。为了满足矩形内每个单元的能
+   量是一样的这个要求,公司需要释放某些单格一定量的能量释放的量可以精
+   确控制。释放能量的代价是e1-e2(其中e>=e2e1表示释放前的能量e2表示
+   释放之后的能量)。放置一块芯片的代为矩形内释放的总能量之和。(保护伞
+   公司技术限制,能量只能释放出去而不能注入进去)现在公司按照如下策略去
+   放置芯片:1.找到可以放置下1块芯片所需要释放的最小能量,然后放置该
+   芯片(程序输出中用芯片的左上角坐标记录)2.如果有多个位置代价一样,那
+   么按照行小的先,如果行一样,按照列小的优先. 3.重复1步骤继续下一个芯
+   片直到整个面板无再放置芯片。注意,芯片之间不能重叠。现在你可以帮助公
+   司计算出可以放置芯片的总数和他们的位置及代价吗?
+   输入:
+    第一行有4个正整数n,m,a,b分别表示n*m大小的材料板和a*b大小的芯片
+    其中1<=a<=n<=10001<=b<=m<=1000下面n行每行有m个数字,表示对应
+    位置的能量每个单位的能量值不超过1,000,000,000。测试数据中33的数
+    据满足1<=n,m<=100。
+   输出描述:
+    输出包含k行,k表示按照公司的放置策略可以放置的芯片数量。下面k行每
+    行包含3个数字R1,,Cost分别表示放置第块芯片左上角的行,列以及放置
+    这个芯片的代价(需要释放的总能量之和,请注意数据范围不要溢出)
+   示例:
+    输入:
+      2 2 2 1
+      2 1
+      3 1
+    输出:
+      2
+      1 2 0
+      1 1 1
+   ````
+   - A:
+   ````python
+    核心思想就是k表示每一个放上去的方块, k的总数是一定的, 按序放置的动态规划
+    n, m, a, b = [int(i) for i in input().split()]
+    kernel = []
+    for i in range(n):
+        kernel.append([int(i) for i in input().split()])
+    row_bias = n - n // a * a
+    column_num = m // b
+    row_num = n // a
+    row_arr = [row_bias] * column_num
+    ans = []
+    def search_min(k, column_bias, row_arr):
+        if k > column_num * row_num - 1:
+            return 0
+        if k % column_num == 0:
+            column_bias = m - m // b * b
+        temp_row_bias = row_arr[k % column_num]
+        y = k // column_num * a + (row_bias - temp_row_bias)
+        x = k % column_num * b + (m - m // b * b - column_bias)
+        min_x, min_y, min_cost = [-1] * 3
+        for i in range(temp_row_bias + 1):
+            for j in range(column_bias + 1):
+                row_arr[k % column_num] -= i
+                kernel_slice = [kernel[q][x: x + j + b] for q in range(y, y + i + a)]
+                min_slice = min(min(kernel_slice))
+                sum_slice = sum([sum(q) for q in kernel_slice])
+                slice_cost = sum_slice - min_slice * a * b
+                temp_cost = search_min(k + 1, column_bias - j, row_arr)
+                if min_cost == -1 or slice_cost + temp_cost < min_cost:
+                    min_cost = temp_cost + slice_cost
+                    min_x, min_y = x, y
+        ans.append([min_y + 1, min_x + 1, min_cost])
+        return min_cost
+    search_min(0, m - m // b * b, row_arr)
+    print(len(ans))
+    print(ans)
+   ````
+
+<a id="I3"></a>
+#### interview3. 阿里2020实习生招聘-1
+   - Q:
+   ````
+   现有n个人,要从这n个人中选任意数量的人组成一只队伍,再在这些人中选出一名队长,求
+   不同的方案数对10+7取模的结果。如果两个方案选取的人的集合不同或选出的队长不同,
+   则认为这两个方案是不同的。
+   ````
+   - A:
+   ````python
+   快速幂
+    # n * 2^(n - 1)
+      n = 5
+      M = 10 ** 9 - 7
+      result = 1
+      ans = n - 1
+      a = 2
+      while ans:
+          if ans & 1 == 1:
+              result *= a % M
+          a = a * a % M
+          ans >>= 1
+      print(n * result % M)
+   ````
+
+<a id="I4"></a>
+#### interview4. 百度2020实习生招聘-1
+   - Q:
+   ````
+   今天，度度熊和牛妹在玩取石子的游戏，开始的时候有几堆石头，第1堆有4个石头，两个人轮流动作，
+   度度熊先走，在每个回合，玩家选择一个非空堆，并从堆中移除-块石头。 如果一个玩家在轮到他之
+   前所有的石碓都是空的，或者如果在移动石头之后，存在两个堆包含相同数量的石头(可能为都为0)，
+   那么他就会输。假设两人都在游戏时选择最佳方式，度度熊和牛妹谁会赢?如果度度熊获胜，输出"man",
+   如果牛妹获胜，输出"woman" (输出不包含双引号)
+   输入描述:
+    第一行一个数表示T组数据(1≤T<10),
+    每组数据第一行一个数n,表示n堆石头(1≤n≤10^5)
+    第二行n个数，表示每堆中石头的个数。(0≤ai≤10^9)
+   输出描述:
+    每组一行如果度度熊获胜，输出“man", 如果牛妹获胜，输出"woman" (输出不包含双引号)
+   示例1:
+    输入:
+      2
+      1
+      1
+    输出:
+      "man"
+    ````
+   - A:
+    ````python
+    核心思想: 轮到自己时就选自己能赢的情况
+    import copy
+      def judge(arr):
+          hash_map = {}
+          for i in arr:
+              if i in hash_map:
+                  return True
+              hash_map[i] = 1
+          return False
+      def who_win(arr, sex):
+          if sum(arr) == 0:
+              return not sex
+          if judge(arr):
+              return sex
+          if sex:
+              ans = True
+              for i in range(len(arr)):
+                  if arr[i] != 0:
+                      temp_arr = copy.deepcopy(arr)
+                      temp_arr[i] -= 1
+                      ans |= who_win(temp_arr, not sex)
+          else:
+              ans = False
+              for i in range(len(arr)):
+                  if arr[i] != 0:
+                      temp_arr = copy.deepcopy(arr)
+                      temp_arr[i] -= 1
+                      ans &= who_win(temp_arr, not sex)
+          return ans
+      ans = []
+      t = int(input())
+      # man: True women: False
+      for i in range(t):
+          n = int(input())
+          arr = [int(j) for j in input().split()]
+          if n == 1:
+              if arr[0] % 2 == 1:
+                  ans.append("man")
+              else:
+                  ans.append("women")
+          else:
+              if who_win(arr, True):
+                  ans.append("man")
+              else:
+                  ans.append("women")
+
+      for word in ans:
+          print(word)
+    ````
+
+<a id="I5"></a>
+#### interview5. 百度2020实习生招聘-2
+   - Q:
+   ````
+   在浩着深邃的星空中，有若干个可以被视为质点的星球， 以及坐着飞船想要探索宇宙奥秘的度度熊。
+   我们假定银河是一-个nx m的区域，顶点在(0,0)和(n,m),度度熊从最左边任意一点进入，打算穿越
+   这片区域并从右边任意一点离开。在银河中分布着K个星球，每个星球以及银河的上下两个边缘都有引力，
+   处于安全考虑，度度熊要离他们越远越好。试求度度熟穿越银河的路径上，距离所有星球以及上下边界的
+   最小距离的最大值可以为多少?
+   输入描述:
+    第一行包含三个整数n,m,k(1<=n,m<=10^6, 1<=k<=6000).
+    接下来k行, 每行两个整数x_i, y_i表示一个点的坐标.
+    第二行n个数, 表示该排列.(1<=ai<=10^9)
+   输出描述:
+    一个实数表示答案, 保留4位小数
+   输入:
+    10 5 2
+    1 1
+    2 3
+   输出:
+    1.1180
+   ````
+   - A:
+   ````python
+   核心思想: 你要通过一个点时, 必定从其上或其下通过, 通过任意两点连线时,
+   必定是从连线中点或和顶或底的中点通过.
+   import math
+     n, m, k = [int(i) for i in input().split()]
+     arr = []
+     for i in range(k):
+         arr.append([float(j) for j in input().split()])
+     ans = float(n) if float(n) > float(m) else float(m)
+     for x, y in arr:
+         distance = max(y / 2, (m - y) / 2)
+         if distance < ans:
+             ans = distance
+     for i in range(k):
+         for j in range(i + 1, k):
+             x1, y1 = arr[i]
+             x2, y2 = arr[j]
+             distance = math.sqrt((y2 - y1)**2 + (x2 - x1)**2) / 2
+             if distance < ans:
+                 ans = distance
+     print("%.4f"%ans)
+
+     string = "abcdefghiihgfedcba"
+     length = len(string)
+     hash_map = {}
+
+     def search_longest(char):
+         max_len = 1
+         ans = char
+         for key, value in hash_map.items():
+             if ord(key) >= ord(char) and len(value) + 1 > max_len:
+                 max_len = len(value) + 1
+                 ans = char + value
+         return ans
+
+     for i in range(length - 1, -1, -1):
+         char = string[i]
+         ans = search_longest(char)
+         hash_map[char] = ans
+
+     print(search_longest("a")[1:])
    ````
