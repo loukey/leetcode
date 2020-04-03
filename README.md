@@ -30,6 +30,7 @@
   * [28. Implement strStr()](#28)
   * [30. Substring with Concatenation of All Words](#30)
   * [31. Next Permutation](#31)
+  * [32. Longest Valid Parentheses](#32)
 * 100+:
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
@@ -998,6 +999,34 @@
                     temp_nums.sort()
                     nums[i + 1:] = temp_nums
                     break
+   ````
+
+<a id="32"></a>
+#### 32. Longest Valid Parentheses
+   - Q:
+   ````
+   给定一个只包含 '(' 和 ')' 的字符串，找出最长的包含有效括号的子串的长度。
+   示例:
+    "()(()": 2
+    "()()": 4
+   ````
+   - A:
+   ````python
+   利用栈, 初始化栈底元素为-1
+   class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        stack = [-1]
+        ans = 0
+        for i in range(len(s)):
+            if s[i] == "(":
+                stack.append(i)
+            else:
+                j = stack.pop()
+                if stack == []:
+                    stack.append(i)
+                else:
+                    ans = ans if ans > i - stack[-1] else i - stack[-1]
+        return ans
    ````
 
 <a id="133"></a>
