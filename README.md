@@ -32,6 +32,7 @@
   * [31. Next Permutation](#31)
   * [32. Longest Valid Parentheses](#32)
   * [33. Search in Rotated Sorted Array](#33)
+  * [34. 在排序数组中查找元素的第一个和最后一个位置](#34)
 * 100+:
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
@@ -1045,6 +1046,7 @@
    ````
    - A:
    ````python
+   先找到中间点, 再两边二分.
    class Solution:
     def search(self, nums: List[int], target: int) -> int:
         def binary_search(arr, num):
@@ -1090,6 +1092,69 @@
             return ans if ans == -1 else ans + j
         else:
             return binary_search(nums[:j], target)
+   ````
+
+<a id="34"></a>
+#### 34. 在排序数组中查找元素的第一个和最后一个位置
+   - Q:
+   ````python
+    给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+    你的算法时间复杂度必须是 O(log n) 级别。
+    如果数组中不存在目标值，返回 [-1, -1]。
+    示例:
+    输入: nums = [5,7,7,8,8,10], target = 8
+    输出: [3,4]
+   ````
+   - A:
+   ````python
+   class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        first, second = -1, -1
+        begin = 0
+        end = len(nums) - 1
+        flag = -1
+        while(begin <= end):
+            mid = (begin + end) // 2
+            if nums[mid] == target:
+                flag = mid
+                break
+            elif nums[mid] < target:
+                begin = mid + 1
+            else:
+                end = mid - 1
+        if flag == -1:
+            return [-1, -1]
+        if nums[0] == target:
+            first = 0
+        else:
+            begin = 0
+            end = flag
+            while begin <= end:
+                mid = (begin + end) // 2
+                if nums[mid] == target:
+                    if nums[mid - 1] < target:
+                        first = mid
+                        break
+                    else:
+                        end = mid - 1
+                else:
+                    begin = mid + 1
+        if nums[-1] == target:
+            second = len(nums) - 1
+        else:
+            begin = flag
+            end = len(nums) - 1
+            while begin <= end:
+                mid = (begin + end) // 2
+                if nums[mid] == target:
+                    if nums[mid + 1] > target:
+                        second = mid
+                        break
+                    else:
+                        begin = mid + 1
+                else:
+                    end = mid - 1
+        return [first, second]
    ````
 
 <a id="133"></a>
