@@ -33,7 +33,19 @@
   * [32. Longest Valid Parentheses](#32)
   * [33. Search in Rotated Sorted Array](#33)
   * [34. 在排序数组中查找元素的第一个和最后一个位置](#34)
+  * [35. 搜索插入位置](#35)
+  * [36. 有效的数独](#36)
+  * [37. 解数独](#37)
+  * [38. 外观数列](#38)
+  * [39. 组合总和](#39)
+  * [40. 组合总和 II](#40)
+  * [75. 颜色分类](#75)
+  * [94. 二叉树的中序遍历](#94)
+  * [95. 不同的二叉搜索树 II](#95)
 * 100+:
+  * [101. 对称二叉树](#101)
+  * [110. 平衡二叉树](#110)
+  * [114. 二叉树展开为链表](#114)
   * [133. Clone Graph](#133)
   * [169. Majority Element](#169)
   * [207. Course Schedule](#207)
@@ -1159,6 +1171,649 @@
         return [first, second]
    ````
 
+<a id="35"></a>
+#### 35. 搜索插入位置
+   - Q:
+   ````python
+   给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，
+   返回它将会被按顺序插入的位置。你可以假设数组中无重复元素。
+   示例:
+   输入: [1,3,5,6], 5
+   输出: 2
+   ````
+   - A:
+   ````python
+   class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        if nums == []:
+            return 0
+        begin = 0
+        end = len(nums) - 1
+        while begin <= end:
+            mid = (begin + end) // 2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] < target:
+                begin = mid + 1
+            else:
+                end = mid - 1
+        if nums[mid] < target:
+            return mid + 1
+        else:
+            return mid
+   ````
+
+<a id="36"></a>
+#### 36. 有效的数独
+   - Q:
+   ````python
+   判断一个 9x9 的数独是否有效。只需要根据以下规则，验证已经填入的数字是否有效即可。
+   数字 1-9 在每一行只能出现一次。
+   数字 1-9 在每一列只能出现一次。
+   数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+   输入:
+    [
+      ["5","3",".",".","7",".",".",".","."],
+      ["6",".",".","1","9","5",".",".","."],
+      [".","9","8",".",".",".",".","6","."],
+      ["8",".",".",".","6",".",".",".","3"],
+      ["4",".",".","8",".","3",".",".","1"],
+      ["7",".",".",".","2",".",".",".","6"],
+      [".","6",".",".",".",".","2","8","."],
+      [".",".",".","4","1","9",".",".","5"],
+      [".",".",".",".","8",".",".","7","9"]
+    ]
+   输出: true
+   ````
+   - A:
+   ````python
+   class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        n = len(board)
+        column = [[] for i in range(n)]
+        row = [[] for i in range(n)]
+        block = [[] for i in range(n)]
+
+        for i in range(len(board)):
+            for j in range(len(board)):
+                if board[i][j] == ".":
+                    continue
+                if board[i][j] in column[j] or board[i][j] in row[i] or board[i][j] in block[i // 3 * 3 + j // 3]:
+                    return False
+                else:
+                    column[j].append(board[i][j])
+                    row[i].append(board[i][j])
+                    block[i // 3 * 3 + j // 3].append(board[i][j])
+        return True
+   ````
+
+<a id="37"></a>
+#### 37. 解数独
+   - Q:
+   ````python
+   编写一个程序，通过已填充的空格来解决数独问题。一个数独的解法需遵循如下规则：
+   数字 1-9 在每一行只能出现一次。
+   数字 1-9 在每一列只能出现一次。
+   数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+   空白格用 '.' 表示。
+   ````
+   - A:
+   ````python
+    from collections import defaultdict
+    class Solution:
+        def solveSudoku(self, board):
+            """
+            :type board: List[List[str]]
+            :rtype: void Do not return anything, modify board in-place instead.
+            """
+            def could_place(d, row, col):
+                """
+                Check if one could place a number d in (row, col) cell
+                """
+                return not (d in rows[row] or d in columns[col] or \
+                        d in boxes[box_index(row, col)])
+            def place_number(d, row, col):
+                """
+                Place a number d in (row, col) cell
+                """
+                rows[row][d] += 1
+                columns[col][d] += 1
+                boxes[box_index(row, col)][d] += 1
+                board[row][col] = str(d)
+            def remove_number(d, row, col):
+                """
+                Remove a number which didn't lead
+                to a solution
+                """
+                del rows[row][d]
+                del columns[col][d]
+                del boxes[box_index(row, col)][d]
+                board[row][col] = '.'
+            def place_next_numbers(row, col):
+                """
+                Call backtrack function in recursion
+                to continue to place numbers
+                till the moment we have a solution
+                """
+                # if we're in the last cell
+                # that means we have the solution
+                if col == N - 1 and row == N - 1:
+                    nonlocal sudoku_solved
+                    sudoku_solved = True
+                #if not yet
+                else:
+                    # if we're in the end of the row
+                    # go to the next row
+                    if col == N - 1:
+                        backtrack(row + 1, 0)
+                    # go to the next column
+                    else:
+                        backtrack(row, col + 1)
+            def backtrack(row = 0, col = 0):
+                """
+                Backtracking
+                """
+                # if the cell is empty
+                if board[row][col] == '.':
+                    # iterate over all numbers from 1 to 9
+                    for d in range(1, 10):
+                        if could_place(d, row, col):
+                            place_number(d, row, col)
+                            place_next_numbers(row, col)
+                            # if sudoku is solved, there is no need to backtrack
+                            # since the single unique solution is promised
+                            if not sudoku_solved:
+                                remove_number(d, row, col)
+                else:
+                    place_next_numbers(row, col)
+            # box size
+            n = 3
+            # row size
+            N = n * n
+            # lambda function to compute box index
+            box_index = lambda row, col: (row // n ) * n + col // n
+            # init rows, columns and boxes
+            rows = [defaultdict(int) for i in range(N)]
+            columns = [defaultdict(int) for i in range(N)]
+            boxes = [defaultdict(int) for i in range(N)]
+            for i in range(N):
+                for j in range(N):
+                    if board[i][j] != '.':
+                        d = int(board[i][j])
+                        place_number(d, i, j)
+            sudoku_solved = False
+            backtrack()
+   ````
+
+<a id="38"></a>
+#### 38. 外观数列
+   - Q:
+   ````python
+   「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。前五项如下：
+    1.     1
+    2.     11
+    3.     21
+    4.     1211
+    5.     111221
+    1 被读作  "one 1"  ("一个一") , 即 11。
+    11 被读作 "two 1s" ("两个一"）, 即 21。
+    21 被读作 "one 2",  "one 1" （"一个二" ,  "一个一") , 即 1211。
+    给定一个正整数 n（1 ≤ n ≤ 30），输出外观数列的第 n 项。
+    注意：整数序列中的每一项将表示为一个字符串。
+    示例:
+      输入: 4
+      输出: "1211"
+      解释：当 n = 3 时，序列是 "21"，其中我们有 "2" 和 "1" 两组，"2" 可以读作 "12"，
+      也就是出现频次 = 1 而 值 = 2；类似 "1" 可以读作 "11"。所以答案是 "12" 和 "11"
+      组合在一起，也就是 "1211"。
+   ````
+   - A:
+   ````python
+   class Solution:
+    def countAndSay(self, n: int) -> str:
+        string = "1"
+        for i in range(n - 1):
+            ans = ""
+            char = string[0]
+            num = 0
+            for j in range(len(string)):
+                if j == len(string) - 1:
+                    if string[j] == char:
+                        ans += str(num + 1) + string[j]
+                    else:
+                        ans += str(num) + string[j - 1] + "1" + string[j]
+                    break
+                if string[j] == char:
+                    num += 1
+                else:
+                    char = string[j]
+                    ans += str(num) + string[j - 1]
+                    num = 1
+            string = ans
+        return string
+   ````
+
+<a id="39"></a>
+#### 39. 组合总和
+   - Q:
+   ````python
+    给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+    candidates 中的数字可以无限制重复被选取。
+    说明：
+    所有数字（包括 target）都是正整数。
+    解集不能包含重复的组合。 
+    输入: candidates = [2,3,6,7], target = 7,
+    所求解集为:
+    [
+      [7],
+      [2,2,3]
+    ]
+   ````
+   - A:
+   ````python
+   class Solution:
+   def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+       if candidates == []:
+           return []
+       ans = []
+       def search(already_arr, arr, target):
+           if arr == []:
+               return False
+           num = target // arr[0]
+           for i in range(num + 1):
+               if arr[0] * i == target:
+                   ans.append(already_arr + [arr[0]] * i)
+               else:
+                   search(already_arr + [arr[0]] * i, arr[1:], target - arr[0] * i)
+       search([], candidates, target)
+       return ans
+   ````
+
+<a id="40"></a>
+#### 40. 组合总和 II
+   - Q:
+   ````python
+    给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+    candidates 中的每个数字在每个组合中只能使用一次。
+    说明：
+    所有数字（包括目标数）都是正整数。
+    解集不能包含重复的组合。 
+    示例 1:
+    输入: candidates = [10,1,2,7,6,1,5], target = 8,
+    所求解集为:
+    [
+      [1, 7],
+      [1, 2, 5],
+      [2, 6],
+      [1, 1, 6]
+    ]
+   ````
+   - A:
+   ````python
+   class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        if candidates == []:
+            return []
+        candidates.sort()
+        ans = []
+        size = len(candidates)
+        def dfs(path, index, target):
+            if target == 0:
+                ans.append(path)
+            for i in range(index, size):
+                if candidates[i] > target:
+                    return
+                if i > index and candidates[i] == candidates[i - 1]:
+                    continue
+                dfs(path + [candidates[i]], i + 1, target - candidates[i])
+        dfs([], 0, target)
+        return ans
+   ````
+
+<a id="75"></a>
+#### 75. 颜色分类
+   - Q:
+   ````python
+    给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+    此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+    注意:
+    不能使用代码库中的排序函数来解决这道题。
+    示例:
+    输入: [2,0,2,1,1,0]
+    输出: [0,0,1,1,2,2]
+    进阶：
+    一个直观的解决方案是使用计数排序的两趟扫描算法。
+    首先，迭代计算出0、1 和 2 元素的个数，然后按照0、1、2的排序，重写当前数组。
+    你能想出一个仅使用常数空间的一趟扫描算法吗？
+   ````
+   - A:
+   ````python
+   class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # nums.sort()
+        begin = 0
+        end = len(nums) - 1
+        while begin < end:
+            while begin < len(nums) - 1 and nums[begin] == 0:
+                begin += 1
+            while end > 0 and nums[end] != 0:
+                end -= 1
+            if begin < end:
+                nums[begin], nums[end] = nums[end], nums[begin]
+        end = len(nums) - 1
+        while begin < end:
+            while begin < len(nums) - 1 and nums[begin] == 1:
+                begin += 1
+            while end > 0 and nums[end] == 2:
+                end -= 1
+            if begin < end:
+                nums[begin], nums[end] = nums[end], nums[begin]
+   ````
+
+<a id="94"></a>
+#### 94. 二叉树的中序遍历
+   - Q:
+   ````python
+    给定一个二叉树，返回它的中序 遍历。
+    示例:
+    输入: [1,null,2,3]
+       1
+        \
+         2
+        /
+       3
+    输出: [1,3,2]
+    进阶: 递归算法很简单，你可以通过迭代算法完成吗？
+   ````
+   - A:
+   ````python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+    class Solution:
+        def __init__(self):
+            self.ans = []
+        def inorderTraversal(self, root: TreeNode) -> List[int]:
+            def search(tree):
+                if not tree:
+                    return
+                if not tree.left and not tree.right:
+                    self.ans.append(tree.val)
+                    return
+                if not tree.left:
+                    self.ans.append(tree.val)
+                    search(tree.right)
+                    return
+                if not tree.right:
+                    search(tree.left)
+                    self.ans.append(tree.val)
+                    return
+                search(tree.left)
+                self.ans.append(tree.val)
+                search(tree.right)
+            search(root)
+            return self.ans
+   ````
+
+<a id="95"></a>
+#### 95. 不同的二叉搜索树 II
+   - Q:
+   ````python
+    给定一个整数 n，生成所有由 1 ... n 为节点所组成的二叉搜索树。
+    示例:
+    输入: 3
+    输出:
+    [
+      [1,null,3,2],
+      [3,2,null,1],
+      [3,1,null,null,2],
+      [2,1,3],
+      [1,null,2,null,3]
+    ]
+    解释:
+    以上的输出对应以下 5 种不同结构的二叉搜索树：
+       1         3     3      2      1
+        \       /     /      / \      \
+         3     2     1      1   3      2
+        /     /       \                 \
+       2     1         2                 3
+   ````
+   - A:
+   ````python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+    class Solution:
+        def generateTrees(self, n: int) -> List[TreeNode]:
+            ans = []
+            nodes = [i + 1 for i in range(n)]
+            def build_bst(tree, left_arr, right_arr):
+                temp = []
+                if left_arr != []:
+                    left_tree = []
+                    for i in range(len(left_arr)):
+                        left_tree += build_bst(left_arr[i], left_arr[:i], left_arr[i + 1:])
+                else:
+                    left_tree = [None]
+                if right_arr != []:
+                    right_tree = []
+                    for i in range(len(right_arr)):
+                        right_tree += build_bst(right_arr[i], right_arr[:i], right_arr[i + 1:])
+                else:
+                    right_tree = [None]
+
+                for left_node in left_tree:
+                    for right_node in right_tree:
+                        temp_tree = TreeNode(tree)
+                        temp_tree.left = left_node
+                        temp_tree.right = right_node
+                        temp.append(temp_tree)
+                return temp
+            for i in nodes:
+                ans += build_bst(i, nodes[:i - 1], nodes[i:])
+            return ans
+   ````
+
+<a id="101"></a>
+#### 101. 对称二叉树
+   - Q:
+   ````python
+    给定一个二叉树，检查它是否是镜像对称的。
+    例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+        1
+       / \
+      2   2
+     / \ / \
+    3  4 4  3
+    但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+        1
+       / \
+      2   2
+       \   \
+       3    3
+    进阶：
+    你可以运用递归和迭代两种方法解决这个问题吗？
+   ````
+   - A:
+   ````python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+    # class Solution:
+    #     def isSymmetric(self, root: TreeNode) -> bool:
+    #         if not root:
+    #             return True
+    #         def symmetric(tree1 , tree2):
+    #             if tree1 == tree2:
+    #                 return True
+    #             if not tree1 or not tree2 or tree1.val != tree2.val:
+    #                 return False
+    #             return symmetric(tree1.right, tree2.left) and symmetric(tree1.left, tree2.right)
+    #         return symmetric(root.left, root.right)
+    from collections import deque
+    class Solution:
+        def isSymmetric(self, root: TreeNode) -> bool:
+            if not root or root.left == root.right:
+                return True
+            queue1 = deque()
+            queue1.append(root.left)
+            queue2 = deque()
+            queue2.append(root.right)
+            while queue1 and queue2:
+                tree1 = queue1.popleft()
+                tree2 = queue2.popleft()
+                if tree1 == tree2:
+                    continue
+                if not tree1 or not tree2 or tree1.val != tree2.val:
+                    return False
+                queue1.append(tree1.left)
+                queue1.append(tree1.right)
+                queue2.append(tree2.right)
+                queue2.append(tree2.left)
+            if queue1 == queue2:
+                return True
+            else:
+                return False
+   ````
+
+<a id="110"></a>
+#### 110. 平衡二叉树
+   - Q:
+   ````python
+    给定一个二叉树，判断它是否是高度平衡的二叉树。
+    本题中，一棵高度平衡二叉树定义为：
+    一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。
+    示例 1:
+    给定二叉树 [3,9,20,null,null,15,7]
+        3
+       / \
+      9  20
+        /  \
+       15   7
+    返回 true 。
+    示例 2:
+    给定二叉树 [1,2,2,3,3,null,null,4,4]
+           1
+          / \
+         2   2
+        / \
+       3   3
+      / \
+     4   4
+    返回 false 。
+   ````
+   - A:
+   ````python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+
+    class Solution:
+
+        def __init__(self):
+            self.flag = True
+
+        def isBalanced(self, root: TreeNode) -> bool:
+            if not root:
+                return True
+            def balance(tree):
+                if not tree.left and not tree.right:
+                    return 0
+                if not tree.left:
+                    height = balance(tree.right) + 1
+                    if height > 1:
+                        self.flag = False
+                    return height
+                if not tree.right:
+                    height = balance(tree.left) + 1
+                    if height > 1:
+                        self.flag = False
+                    return height
+                height1 = balance(tree.left) + 1
+                height2 = balance(tree.right) + 1
+                if abs(height1 - height2) > 1:
+                    self.flag = False
+                return height1 if height1 > height2 else height2
+            balance(root)
+            return self.flag
+   ````
+
+<a id="114"></a>
+#### 114. 二叉树展开为链表
+   - Q:
+   ````python
+    给定一个二叉树，原地将它展开为链表。
+    例如，给定二叉树
+        1
+       / \
+      2   5
+     / \   \
+    3   4   6
+    将其展开为：
+    1
+     \
+      2
+       \
+        3
+         \
+          4
+           \
+            5
+             \
+   ````
+   - A:
+   ````python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.left = None
+    #         self.right = None
+
+    from collections import deque
+    class Solution:
+        def flatten(self, root: TreeNode) -> None:
+            """
+            Do not return anything, modify root in-place instead.
+            """
+            if not root:
+                return None
+            def merge(tree):
+                if not tree.left and not tree.right:
+                    return tree
+                if not tree.left:
+                    tree.right = merge(tree.right)
+                    return tree
+                if not tree.right:
+                    tree.right = merge(tree.left)
+                    tree.left = None
+                    return tree
+                left_node = merge(tree.left)
+                right_node = merge(tree.right)
+                tree.right = left_node
+                tree.left = None
+                while left_node.right != None:
+                    left_node = left_node.right
+                left_node.right = right_node
+                return tree
+            merge(root)
+   ````
+
 <a id="133"></a>
 #### 133. Clone Graph
    - Q: 邻接表遍历图
@@ -1767,24 +2422,24 @@
 <a id="I5"></a>
 #### interview5. 百度2020实习生招聘-2
    - Q:
-   ````
-   在浩着深邃的星空中，有若干个可以被视为质点的星球， 以及坐着飞船想要探索宇宙奥秘的度度熊。
-   我们假定银河是一-个nx m的区域，顶点在(0,0)和(n,m),度度熊从最左边任意一点进入，打算穿越
-   这片区域并从右边任意一点离开。在银河中分布着K个星球，每个星球以及银河的上下两个边缘都有引力，
-   处于安全考虑，度度熊要离他们越远越好。试求度度熟穿越银河的路径上，距离所有星球以及上下边界的
-   最小距离的最大值可以为多少?
-   输入描述:
-    第一行包含三个整数n,m,k(1<=n,m<=10^6, 1<=k<=6000).
-    接下来k行, 每行两个整数x_i, y_i表示一个点的坐标.
-    第二行n个数, 表示该排列.(1<=ai<=10^9)
-   输出描述:
-    一个实数表示答案, 保留4位小数
-   输入:
-    10 5 2
-    1 1
-    2 3
-   输出:
-    1.1180
+   ````python
+     在浩着深邃的星空中，有若干个可以被视为质点的星球， 以及坐着飞船想要探索宇宙奥秘的度度熊。
+     我们假定银河是一-个nx m的区域，顶点在(0,0)和(n,m),度度熊从最左边任意一点进入，打算穿越
+     这片区域并从右边任意一点离开。在银河中分布着K个星球，每个星球以及银河的上下两个边缘都有引力，
+     处于安全考虑，度度熊要离他们越远越好。试求度度熟穿越银河的路径上，距离所有星球以及上下边界的
+     最小距离的最大值可以为多少?
+     输入描述:
+      第一行包含三个整数n,m,k(1<=n,m<=10^6, 1<=k<=6000).
+      接下来k行, 每行两个整数x_i, y_i表示一个点的坐标.
+      第二行n个数, 表示该排列.(1<=ai<=10^9)
+     输出描述:
+      一个实数表示答案, 保留4位小数
+     输入:
+      10 5 2
+      1 1
+      2 3
+     输出:
+      1.1180
    ````
    - A:
    ````python
@@ -1889,6 +2544,7 @@
 <a id="I7"></a>
 #### interview7. 网易2020实习生招聘-2
    - Q:
+   ````python
    日常收快递留下一堆快递盒占地方。 现在有N个快递盒，盒子不做翻转， 每个
    盒子有自己的长宽高数据，都以整数形式(L,W,H) 出现，将小子整理到大盒子
    里面(小盒子的长宽高都小于大盒子)。要求快递盒一个套一个(即，打开一个大
@@ -1901,6 +2557,7 @@
     [[2,3,2],[2,2,3]]
    输出:
     1(全放不了就输出1)
+   ````
    - A:
    ````python
     import copy
