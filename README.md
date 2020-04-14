@@ -50,6 +50,8 @@
   * [interview3. 阿里2020实习生招聘-1](#I3)
   * [interview4. 百度2020实习生招聘-1](#I4)
   * [interview5. 百度2020实习生招聘-2](#I5)
+  * [interview6. 网易2020实习生招聘-1](#I6)
+  * [interview7. 网易2020实习生招聘-2](#I7)
 
 <a id="1"></a>
 #### 1. Two Sum
@@ -1826,4 +1828,104 @@
          hash_map[char] = ans
 
      print(search_longest("a")[1:])
+   ````
+
+<a id="I6"></a>
+#### interview6. 网易2020实习生招聘-1
+   - Q:
+   ````python
+   厂长阿维需要根据工厂里每个员工的劳动技能等级来分配每天的工作任务。
+   一个工作任务只能由劳动技能等级大于等于该任务难度的员工来完成，且
+   同一天里一个员工只能对应一个工作任务, 一个工作任务只能由一个员工
+   来完成. 员工i的劳动技能等级由整数Wi来表示, 工作任务i的任务难度由
+   整数Ti来表示. 如何分配今天的工作任务.
+   输入描述:
+    第一行输入员工数N, N为整数, 且1<=N<=10^5;
+    第二行输入N个员工的劳动技能等级Wi, 以空格分隔, Wi为整数, 且
+    0<=Wi<=10^9;
+    第三行输入N个任务的任务难度Ti, 以空格分隔, Ti为整数, 且0<=Ti<=10^9;
+    第四行输入一个整数M, 且1<=M<=10^9;
+   输出描述:
+    输出一个整数, 该整数为所有可能的分配方式的数量除以M后所得的余数.
+   输入:
+    6
+    1 6 3 4 5 2
+    2 3 1 4 6 5
+    10
+   输出:
+    1
+   ````
+   - A:
+   ````python
+    N = int(input())
+    W = [int(i) for i in input().split()]
+    T = [int(i) for i in input().split()]
+    M = int(input())
+
+    def search(W, T):
+        if W == T:
+            return 1
+        elif W[-1] < T[-1]:
+            return 0
+
+        return (len(W[hash_map[T[-1]]:]) % M) * search(W[:-1], T[:-1]) % M
+
+    W.sort()
+    T.sort()
+    hash_map = {}
+    i, j = N - 1, N - 1
+    if T[i] > W[j]:
+        print(0)
+    else:
+        while i >= 0:
+            while j >= 0 and W[j] >= T[i]:
+                j -= 1
+            if T[i] not in hash_map:
+                hash_map[T[i]] = j + 1
+            i -= 1
+        print(search(W, T))
+   ````
+
+<a id="I7"></a>
+#### interview7. 网易2020实习生招聘-2
+   - Q:
+   日常收快递留下一堆快递盒占地方。 现在有N个快递盒，盒子不做翻转， 每个
+   盒子有自己的长宽高数据，都以整数形式(L,W,H) 出现，将小子整理到大盒子
+   里面(小盒子的长宽高都小于大盒子)。要求快递盒一个套一个(即，打开一个大
+   盒子最多只能看到一个小盒子)，最多能整理多少个盒子打包到一起.
+   输入:
+    [[5,4,3], [5,4,5], [6,6,6]]
+   输出:
+    2
+   输入:
+    [[2,3,2],[2,2,3]]
+   输出:
+    1(全放不了就输出1)
+   - A:
+   ````python
+    import copy
+    def maxBoxes(boxes):
+        if len(boxes) == 0:
+            return 1
+        boxes.sort(key=lambda x: x[0], reverse=True)
+        def search(big_boxes, boxes):
+            if not boxes:
+                return len(big_boxes)
+            ans = []
+            box = boxes[0]
+            for i in range(len(big_boxes)):
+                if big_boxes[i][0] > box[0] and big_boxes[i][1] > box[1] and big_boxes[i][2] > box[2]:
+                    temp_boxes = copy.deepcopy(big_boxes)
+                    temp_boxes[i] = box
+                    ans.append(search(temp_boxes, boxes[1:]))
+            temp_boxes = copy.deepcopy(big_boxes)
+            temp_boxes.append(box)
+            ans.append(search(temp_boxes, boxes[1:]))
+            return min(ans)
+        num = search([], boxes)
+        if num == len(boxes):
+            return 1
+        return search([], boxes)
+
+    print(maxBoxes([[5,6,3],[5,4,4],[6,3,6]]))
    ````
